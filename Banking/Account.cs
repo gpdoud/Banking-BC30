@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Banking.Exceptions;
+
 namespace Banking {
 
     class Account {
@@ -53,8 +55,12 @@ namespace Banking {
                 return Balance;
             }
             if(Balance < amount) {
-                Console.WriteLine("Insufficient Funds!");
-                return Balance;
+                var dbz = new DivideByZeroException("This is the innerException");
+                var isfex = new InsufficientFundsException("Not sufficient funds", dbz);
+                isfex.AccountId = this.Id;
+                isfex.AmountToWithdraw = amount;
+                isfex.Balance = this.Balance;
+                throw isfex;
             }
             // Balance = Balance - amount
             Balance -= amount;
